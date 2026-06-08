@@ -6,22 +6,28 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
+use App\Models\Owner;
 use App\Models\Pengajar;
 use App\Models\OrangTua;
 use App\Models\Siswa;
 use App\Models\LevelPembelajaran;
 use App\Models\ModulPembelajaran;
+use App\Models\TransaksiModul;
 use App\Models\Keuangan;
 
 class SmartAHESeeder extends Seeder
 {
     public function run(): void
     {
-        $owner = User::create([
+        $userOwner = User::create([
             'name' => 'Owner SmartAHE',
             'email' => 'owner@smartahe.com',
             'password' => Hash::make('owner123'),
             'role' => 'owner',
+        ]);
+
+        $owner = Owner::create([
+            'user_id' => $userOwner->id,
         ]);
 
         $userPengajar = User::create([
@@ -33,8 +39,8 @@ class SmartAHESeeder extends Seeder
 
         $pengajar = Pengajar::create([
             'user_id' => $userPengajar->id,
-            'nama' => 'Bu Rina',
-            'no_hp' => '08123456789',
+            'nama_pengajar' => 'Bu Rina',
+            'no_hp' => '081234567890',
             'alamat' => 'Pekanbaru',
         ]);
 
@@ -47,17 +53,17 @@ class SmartAHESeeder extends Seeder
 
         $orangTua = OrangTua::create([
             'user_id' => $userOrangTua->id,
-            'nama' => 'Pak Ahmad',
-            'no_hp' => '08234567890',
+            'nama_orang_tua' => 'Pak Ahmad',
+            'no_hp' => '082345678901',
             'alamat' => 'Pekanbaru',
         ]);
 
         $siswa = Siswa::create([
             'orang_tua_id' => $orangTua->id,
-            'nama' => 'Budi Santoso',
-            'jenis_kelamin' => 'Laki-laki',
-            'tanggal_lahir' => '2018-05-10',
+            'nama_siswa' => 'Budi Santoso',
             'alamat' => 'Pekanbaru',
+            'tanggal_lahir' => '2018-05-10',
+            'jenis_kelamin' => 'Laki-laki',
         ]);
 
         LevelPembelajaran::create([
@@ -67,19 +73,27 @@ class SmartAHESeeder extends Seeder
             'keterangan' => 'Siswa baru mendaftar',
         ]);
 
-        ModulPembelajaran::create([
-            'nama_modul' => 'Modul Membaca Dasar',
-            'level' => 'Level 1',
+        $modul = ModulPembelajaran::create([
+            'owner_id' => $owner->id,
+            'nama' => 'Modul Membaca Dasar',
             'stok' => 100,
+            'level' => 'Level 1',
+        ]);
+
+        TransaksiModul::create([
+            'modul_pembelajaran_id' => $modul->id,
+            'jenis' => 'Masuk',
+            'jumlah' => 100,
+            'tanggal' => now(),
+            'keterangan' => 'Stok awal modul',
         ]);
 
         Keuangan::create([
+            'owner_id' => $owner->id,
             'jenis' => 'Pemasukan',
             'jumlah' => 500000,
             'tanggal' => now(),
             'keterangan' => 'Pembayaran SPP',
         ]);
     }
-
-
 }

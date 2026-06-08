@@ -23,7 +23,7 @@ class PengajarController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
+            'nama_pengajar' => 'required',
             'no_hp' => 'required',
             'alamat' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -31,7 +31,7 @@ class PengajarController extends Controller
         ]);
 
         $user = User::create([
-            'name' => $request->nama,
+            'name' => $request->nama_pengajar,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'pengajar',
@@ -39,7 +39,7 @@ class PengajarController extends Controller
 
         $pengajar = Pengajar::create([
             'user_id' => $user->id,
-            'nama' => $request->nama,
+            'nama_pengajar' => $request->nama_pengajar,
             'no_hp' => $request->no_hp,
             'alamat' => $request->alamat,
         ]);
@@ -65,20 +65,20 @@ class PengajarController extends Controller
         $pengajar = Pengajar::findOrFail($id);
 
         $request->validate([
-            'nama' => 'required',
+            'nama_pengajar' => 'required',
             'no_hp' => 'required',
             'alamat' => 'required',
         ]);
 
         $pengajar->update([
-            'nama' => $request->nama,
+            'nama_pengajar' => $request->nama_pengajar,
             'no_hp' => $request->no_hp,
             'alamat' => $request->alamat,
         ]);
 
         if ($pengajar->user) {
             $pengajar->user->update([
-                'name' => $request->nama,
+                'name' => $request->nama_pengajar,
             ]);
         }
 

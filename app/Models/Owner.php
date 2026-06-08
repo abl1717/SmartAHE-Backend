@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrangTua extends Model
+class Owner extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'nama_orang_tua',
-        'no_hp',
-        'alamat',
     ];
 
     public function user()
@@ -21,8 +18,13 @@ class OrangTua extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function siswas()
+    public function modulPembelajaran()
     {
-        return $this->hasMany(Siswa::class);
+        return $this->hasMany(ModulPembelajaran::class);
+    }
+
+    public function keuangan()
+    {
+        return $this->hasMany(Keuangan::class);
     }
 }

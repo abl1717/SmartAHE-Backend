@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('level_pembelajarans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->cascadeOnDelete();
             $table->foreignId('pengajar_id')->constrained('pengajars')->cascadeOnDelete();
+            $table->foreignId('siswa_id')->constrained('siswas')->cascadeOnDelete();
             $table->string('level');
             $table->text('keterangan')->nullable();
             $table->timestamps();

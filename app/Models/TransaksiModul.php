@@ -10,7 +10,7 @@ class TransaksiModul extends Model
     use HasFactory;
 
     protected $fillable = [
-        'modul_id',
+        'modul_pembelajaran_id',
         'jenis',
         'jumlah',
         'tanggal',
@@ -19,6 +19,6 @@ class TransaksiModul extends Model
 
     public function modul()
     {
-        return $this->belongsTo(ModulPembelajaran::class, 'modul_id');
+        return $this->belongsTo(ModulPembelajaran::class, 'modul_pembelajaran_id');
     }
 }

@@ -11,10 +11,10 @@ class Siswa extends Model
 
     protected $fillable = [
         'orang_tua_id',
-        'nama',
-        'jenis_kelamin',
-        'tanggal_lahir',
+        'nama_siswa',
         'alamat',
+        'tanggal_lahir',
+        'jenis_kelamin',
     ];
 
     public function orangTua()

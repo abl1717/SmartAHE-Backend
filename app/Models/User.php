@@ -39,4 +39,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(OrangTua::class);
     }
+
+    public function owner()
+    {
+        return $this->hasOne(Owner::class);
+    }
 }

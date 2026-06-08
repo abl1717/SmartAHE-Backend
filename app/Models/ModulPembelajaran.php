@@ -10,13 +10,19 @@ class ModulPembelajaran extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_modul',
-        'level',
+        'owner_id',
+        'nama',
         'stok',
+        'level',
     ];
+
+    public function owner()
+    {
+        return $this->belongsTo(Owner::class);
+    }
 
     public function transaksiModul()
     {
-        return $this->hasMany(TransaksiModul::class, 'modul_id');
+        return $this->hasMany(TransaksiModul::class);
     }
 }

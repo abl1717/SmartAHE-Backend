@@ -12,9 +12,10 @@ return new class extends Migration {
     {
         Schema::create('modul_pembelajarans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_modul');
-            $table->string('level');
+            $table->foreignId('owner_id')->constrained('owners')->cascadeOnDelete();
+            $table->string('nama');
             $table->integer('stok');
+            $table->string('level');
             $table->timestamps();
         });
     }

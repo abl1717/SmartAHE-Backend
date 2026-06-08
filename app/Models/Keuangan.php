@@ -10,9 +10,15 @@ class Keuangan extends Model
     use HasFactory;
 
     protected $fillable = [
+        'owner_id',
         'jenis',
         'jumlah',
         'tanggal',
         'keterangan',
     ];
+
+    public function owner()
+    {
+        return $this->belongsTo(Owner::class);
+    }
 }

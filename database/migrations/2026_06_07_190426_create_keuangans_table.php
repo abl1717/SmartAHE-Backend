@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('keuangans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('owner_id')->constrained('owners')->cascadeOnDelete();
             $table->string('jenis');
             $table->integer('jumlah');
             $table->date('tanggal');

@@ -12,7 +12,10 @@ return new class extends Migration {
     {
         Schema::create('transaksi_moduls', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('modul_id')->constrained('modul_pembelajarans')->cascadeOnDelete();
+            $table->foreignId('modul_pembelajaran_id')
+                ->constrained('modul_pembelajarans')
+                ->cascadeOnDelete();
+
             $table->string('jenis');
             $table->integer('jumlah');
             $table->date('tanggal');
