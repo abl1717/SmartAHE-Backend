@@ -73,20 +73,32 @@ class SmartAHESeeder extends Seeder
             'keterangan' => 'Siswa baru mendaftar',
         ]);
 
-        $modul = ModulPembelajaran::create([
-            'owner_id' => $owner->id,
-            'nama' => 'Modul Membaca Dasar',
-            'stok' => 100,
-            'level' => 'Level 1',
-        ]);
+        $modulList = [
+            ['nama' => 'Modul Level 1', 'level' => 'Level 1', 'stok' => 100],
+            ['nama' => 'Modul Level 2', 'level' => 'Level 2', 'stok' => 100],
+            ['nama' => 'Modul Level 3', 'level' => 'Level 3', 'stok' => 100],
+            ['nama' => 'Modul Level 4', 'level' => 'Level 4', 'stok' => 100],
+            ['nama' => 'Modul Level 5', 'level' => 'Level 5', 'stok' => 100],
+            ['nama' => 'Modul Level 6', 'level' => 'Level 6', 'stok' => 100],
+            ['nama' => 'Modul Level 7', 'level' => 'Level 7', 'stok' => 100],
+        ];
 
-        TransaksiModul::create([
-            'modul_pembelajaran_id' => $modul->id,
-            'jenis' => 'Masuk',
-            'jumlah' => 100,
-            'tanggal' => now(),
-            'keterangan' => 'Stok awal modul',
-        ]);
+        foreach ($modulList as $item) {
+            $modul = ModulPembelajaran::create([
+                'owner_id' => $owner->id,
+                'nama' => $item['nama'],
+                'level' => $item['level'],
+                'stok' => $item['stok'],
+            ]);
+
+            TransaksiModul::create([
+                'modul_pembelajaran_id' => $modul->id,
+                'jenis' => 'Masuk',
+                'jumlah' => $item['stok'],
+                'tanggal' => now(),
+                'keterangan' => 'Stok awal ' . $item['nama'],
+            ]);
+        }
 
         Keuangan::create([
             'owner_id' => $owner->id,
