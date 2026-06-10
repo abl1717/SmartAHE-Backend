@@ -7,6 +7,8 @@ use App\Models\LevelPembelajaran;
 use App\Models\OrangTua;
 use App\Models\Siswa;
 use App\Models\User;
+use App\Models\ModulPembelajaran;
+use App\Models\TransaksiModul;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -76,6 +78,32 @@ class SiswaController extends Controller
                 'pengajar_id' => $request->pengajar_id,
                 'level' => 'Level 1',
                 'keterangan' => 'Siswa baru mendaftar',
+            ]);
+
+            $modulLevelSatu = ModulPembelajaran::where('level', 'Level 1')->first();
+
+            if (!$modulLevelSatu) {
+                return response()->json([
+                    'message' => 'Modul Level 1 belum tersedia.',
+                ], 400);
+            }
+
+            if ($modulLevelSatu->stok < 1) {
+                return response()->json([
+                    'message' => 'Stok Modul Level 1 tidak mencukupi.',
+                ], 400);
+            }
+
+            $modulLevelSatu->update([
+                'stok' => $modulLevelSatu->stok - 1,
+            ]);
+
+            TransaksiModul::create([
+                'modul_pembelajaran_id' => $modulLevelSatu->id,
+                'jenis' => 'Keluar',
+                'jumlah' => 1,
+                'tanggal' => now(),
+                'keterangan' => 'Modul Level 1 diberikan kepada siswa baru: ' . $siswa->nama_siswa,
             ]);
 
             return response()->json([
