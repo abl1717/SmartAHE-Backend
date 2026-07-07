@@ -8,9 +8,14 @@ use Illuminate\Http\Request;
 
 class LevelPembelajaranController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $level = LevelPembelajaran::with('siswa.orangTua', 'pengajar')->get();
+        $perPage = $request->get('per_page', 10);
+
+        $level = LevelPembelajaran::with(
+            'siswa.orangTua',
+            'pengajar'
+        )->paginate($perPage);
 
         return response()->json([
             'message' => 'Data level pembelajaran berhasil diambil',
@@ -81,6 +86,20 @@ class LevelPembelajaranController extends Controller
 
         return response()->json([
             'message' => 'Data level pembelajaran berhasil dihapus',
+        ]);
+    }
+
+    public function bySiswa($id)
+    {
+        $level = LevelPembelajaran::with([
+            'siswa.orangTua',
+            'pengajar'
+        ])
+            ->where('siswa_id', $id)
+            ->first();
+
+        return response()->json([
+            'data' => $level
         ]);
     }
 }

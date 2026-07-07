@@ -19,3 +19,8 @@ Route::apiResource('/level-pembelajaran', LevelPembelajaranController::class);
 Route::apiResource('/modul-pembelajaran', ModulPembelajaranController::class);
 Route::apiResource('/transaksi-modul', TransaksiModulController::class);
 Route::apiResource('/keuangan', KeuanganController::class);
+
+Route::get(
+    '/level-pembelajaran/siswa/{id}',
+    [LevelPembelajaranController::class, 'bySiswa']
+);

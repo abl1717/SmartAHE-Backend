@@ -15,12 +15,32 @@ use Illuminate\Support\Facades\Hash;
 
 class SiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $siswa = Siswa::with('orangTua.user', 'levelPembelajaran.pengajar')->get();
+        $perPage = $request->get('per_page', 10);
+
+        $siswa = Siswa::with([
+            'orangTua.user',
+            'levelPembelajaran.pengajar'
+        ])
+            ->latest()
+            ->paginate($perPage);
+
+        $totalSiswa = Siswa::count();
+
+        $totalOrangTua = OrangTua::count();
+
+        $totalPengajar = \App\Models\Pengajar::count();
 
         return response()->json([
             'message' => 'Data siswa berhasil diambil',
+
+            'summary' => [
+                'total_siswa' => $totalSiswa,
+                'total_orang_tua' => $totalOrangTua,
+                'total_pengajar' => $totalPengajar,
+            ],
+
             'data' => $siswa,
         ]);
     }

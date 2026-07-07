@@ -9,12 +9,34 @@ use Illuminate\Http\Request;
 
 class KeuanganController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $keuangan = Keuangan::with('owner.user')->latest()->get();
+        $perPage = $request->get('per_page', 10);
+
+        $keuangan = Keuangan::with('owner.user')
+            ->latest()
+            ->paginate($perPage);
+
+        $totalPemasukan = Keuangan::where('jenis', 'Pemasukan')
+            ->sum('jumlah');
+
+        $totalPengeluaran = Keuangan::where('jenis', 'Pengeluaran')
+            ->sum('jumlah');
+
+        $totalSaldo = $totalPemasukan - $totalPengeluaran;
+
+        $totalData = Keuangan::count();
 
         return response()->json([
             'message' => 'Data keuangan berhasil diambil',
+
+            'summary' => [
+                'total_pemasukan' => $totalPemasukan,
+                'total_pengeluaran' => $totalPengeluaran,
+                'total_saldo' => $totalSaldo,
+                'total_data' => $totalData,
+            ],
+
             'data' => $keuangan,
         ]);
     }

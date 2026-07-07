@@ -10,13 +10,28 @@ use Illuminate\Support\Facades\Hash;
 
 class PengajarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengajar = Pengajar::with('user', 'levelPembelajaran')->get();
+        $perPage = $request->get('per_page', 10);
+
+        $pengajar = Pengajar::with('levelPembelajaran')
+            ->latest()
+            ->paginate($perPage);
+        $totalPengajar = Pengajar::count();
+
+        $pengajarMembimbing = Pengajar::has('levelPembelajaran')->count();
+
+        $totalBimbingan = \App\Models\LevelPembelajaran::count();
 
         return response()->json([
             'message' => 'Data pengajar berhasil diambil',
             'data' => $pengajar,
+
+            'summary' => [
+                'total_pengajar' => $totalPengajar,
+                'pengajar_membimbing' => $pengajarMembimbing,
+                'total_bimbingan' => $totalBimbingan,
+            ],
         ]);
     }
 
