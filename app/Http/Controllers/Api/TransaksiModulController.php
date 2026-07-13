@@ -12,7 +12,9 @@ class TransaksiModulController extends Controller
 {
     public function index()
     {
-        $transaksi = TransaksiModul::with('modul')->latest()->get();
+        $transaksi = TransaksiModul::with('modul')
+            ->latest()
+            ->paginate(10);
 
         return response()->json([
             'message' => 'Data transaksi modul berhasil diambil',
